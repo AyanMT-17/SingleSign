@@ -22,8 +22,10 @@ const db = {
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 app.use(cors({
-    origin: `${process.env.FRONTEND_URL}`, // Vite's default port
-    credentials: true // Crucial for sending cookies
+    // CRITICAL: This MUST match your Vercel domain exactly, including the HTTPS protocol.
+    // e.g., 'https://single-sign.vercel.app'
+    origin: `${process.env.FRONTEND_URL}`, 
+    credentials: true // ESSENTIAL for sending cookies (already correct)
 }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -82,12 +84,15 @@ app.post('/api/login', async (req, res) => {
         });
 
         // 4. Store JWT in HTTP-Only Cookie
-        res.cookie('jwt', token, {
-            httpOnly: true, // Prevents client-side JS access
-            secure: process.env.NODE_ENV === 'production', // Use 'true' in production with HTTPS
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            sameSite: 'Lax', // Security setting
-        });
+res.cookie('jwt', token, {
+    httpOnly: true,
+    // CRITICAL: MUST be true since your app is on HTTPS (e.g., Vercel)
+    secure: true, 
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    // CRITICAL: MUST be 'None' or 'Lax' because Vercel (frontend) is a different domain than your API.
+    // Try 'None' first, as it's often necessary for cross-site POST/GET requests.
+    sameSite: 'None', 
+});
 
         res.json({ message: 'Login successful', user: { name, email } });
 
@@ -108,11 +113,12 @@ app.get('/api/user', protect, (req, res) => {
 
 // --- API: Logout ---
 app.post('/api/logout', (req, res) => {
-    res.cookie('jwt', '', {
-        httpOnly: true,
-        expires: new Date(0), // Expire the cookie immediately
-        sameSite: 'strict',
-    });
+res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+    secure: true, 
+    sameSite: 'Lax',
+});
     res.json({ message: 'Logout successful' });
 });
 
