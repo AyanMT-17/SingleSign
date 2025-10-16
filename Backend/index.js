@@ -33,7 +33,7 @@ const protect = (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-        return res.status(401).json({ message: 'Not authenticated. No token found.' });
+        return res.status(401).json({ message: error });
     }
 
     try {
@@ -85,7 +85,7 @@ app.post('/api/login', async (req, res) => {
             httpOnly: true, // Prevents client-side JS access
             secure: process.env.NODE_ENV === 'production', // Use 'true' in production with HTTPS
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-            sameSite: 'strict', // Security setting
+            sameSite: 'Lax', // Security setting
         });
 
         res.json({ message: 'Login successful', user: { name, email } });
