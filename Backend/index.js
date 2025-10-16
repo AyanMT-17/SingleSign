@@ -46,7 +46,9 @@ const protect = (req, res, next) => {
         return res.status(401).json({ message: 'Not authenticated. Invalid token.' });
     }
 };
-
+app.get('/', (req, res) => {
+    res.send('Welcome to the Single Sign-On Backend!');
+});
 // --- API: Google Login Endpoint ---
 app.post('/api/login', async (req, res) => {
     const { idToken } = req.body;
