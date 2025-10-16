@@ -30,6 +30,13 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+    // This header allows the Google SSO pop-up window (or redirect) 
+    // to communicate back to the main window using postMessage.
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
 // --- Middleware to Protect Routes (JWT Verification) ---
 const protect = (req, res, next) => {
     const token = req.cookies.jwt;
