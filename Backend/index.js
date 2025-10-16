@@ -32,8 +32,9 @@ app.use(cookieParser());
 const protect = (req, res, next) => {
     const token = req.cookies.jwt;
 
+    // FIX: Use a descriptive string instead of the undefined 'error' variable
     if (!token) {
-        return res.status(401).json({ message: error });
+        return res.status(401).json({ message: 'Not authenticated. No token found.' });
     }
 
     try {
@@ -42,7 +43,7 @@ const protect = (req, res, next) => {
         req.userId = decoded.googleId;
         next();
     } catch (err) {
-        // If the token is invalid or expired
+        // This is correct: handles invalid, expired, or tampered tokens
         return res.status(401).json({ message: 'Not authenticated. Invalid token.' });
     }
 };
