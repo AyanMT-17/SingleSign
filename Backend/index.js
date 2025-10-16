@@ -22,7 +22,7 @@ const db = {
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Vite's default port
+    origin: `${process.env.FRONTEND_URL}`, // Vite's default port
     credentials: true // Crucial for sending cookies
 }));
 app.use(bodyParser.json());

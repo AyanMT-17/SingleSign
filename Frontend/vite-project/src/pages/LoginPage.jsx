@@ -6,7 +6,7 @@ const LoginPage = ({ setUser }) => {
     const handleLoginSuccess = async (credentialResponse) => {
         try {
             const { credential } = credentialResponse;
-            const res = await axios.post('http://localhost:5000/api/login', {
+            const res = await axios.post( `${import.meta.env.VITE_BACKEND_URL}/api/login`, {
                 idToken: credential,
             });
             setUser(res.data.user);

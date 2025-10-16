@@ -14,7 +14,7 @@ function App() {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/user');
+                const res = await axios.get( `${import.meta.env.VITE_BACKEND_URL}/api/user`);
                 setUser(res.data.user);
             } catch (error) {
                 console.log('No user logged in');

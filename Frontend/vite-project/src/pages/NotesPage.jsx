@@ -8,7 +8,7 @@ const NotesPage = ({ user, setUser }) => {
     useEffect(() => {
         const fetchNotes = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/notes', { withCredentials: true });
+                const res = await axios.get( `${import.meta.env.VITE_BACKEND_URL}/api/notes`, { withCredentials: true });
                 setNotes(res.data.notes);
             } catch (error) {
                 console.error('Failed to fetch notes:', error);
@@ -21,7 +21,7 @@ const NotesPage = ({ user, setUser }) => {
         e.preventDefault();
         if (!newNote.trim()) return;
         try {
-            const res = await axios.post('http://localhost:5000/api/notes', { content: newNote }, { withCredentials: true });
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/notes`, { content: newNote }, { withCredentials: true });
             setNotes([...notes, res.data.note]);
             setNewNote('');
         } catch (error) {
@@ -31,7 +31,7 @@ const NotesPage = ({ user, setUser }) => {
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:5000/api/logout', {}, { withCredentials: true });
+            await axios.post( `${import.meta.env.VITE_BACKEND_URL}/api/logout`, {}, { withCredentials: true });
             setUser(null);
         } catch (error) {
             console.error('Logout failed:', error);
